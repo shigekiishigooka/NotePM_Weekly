@@ -1,0 +1,559 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotePM blog 週次レポート｜2026年W16</title>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700&display=swap" rel="stylesheet">
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Noto Sans JP', sans-serif;
+    font-size: 13px;
+    line-height: 1.7;
+    color: #333;
+    background: #fff;
+    padding: 32px 24px;
+  }
+
+  .wrap { max-width: 780px; margin: 0 auto; }
+
+  /* ヘッダー */
+  .report-header {
+    border-bottom: 2px solid #2c5f9e;
+    padding-bottom: 12px;
+    margin-bottom: 24px;
+  }
+  .report-header h1 {
+    font-size: 18px;
+    font-weight: 700;
+    color: #2c5f9e;
+    margin-bottom: 4px;
+  }
+  .report-meta { font-size: 11px; color: #666; }
+
+  /* セクション見出し */
+  .section-title {
+    font-weight: bold;
+    font-size: 13px;
+    margin-top: 28px;
+    margin-bottom: 10px;
+  }
+  .section-title::before { content: '■ '; }
+
+  /* テーブル共通 */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 12px;
+    margin-bottom: 6px;
+  }
+  th {
+    background: #2c5f9e;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    padding: 8px 10px;
+    text-align: left;
+    border: 1px solid #2c5f9e;
+  }
+  td {
+    padding: 7px 10px;
+    border: 1px solid #d0d8e4;
+    vertical-align: middle;
+  }
+  tr:nth-child(even) td { background: #f5f7fb; }
+  tr:nth-child(odd) td { background: #fff; }
+
+  /* 数値色 */
+  .down { color: #c0392b; font-weight: bold; }
+  .up   { color: #1e8449; font-weight: bold; }
+  .warn { color: #c0392b; font-weight: bold; }
+  .good { color: #1e8449; font-weight: bold; }
+
+  /* 示唆・ネクストアクション */
+  .insight-list, .action-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+  .insight-list li, .action-list li {
+    font-size: 12.5px;
+    line-height: 1.8;
+    padding: 8px 0 8px 16px;
+    border-bottom: 1px solid #e8ecf0;
+    position: relative;
+  }
+  .insight-list li::before {
+    content: '-';
+    position: absolute;
+    left: 0;
+    color: #2c5f9e;
+    font-weight: bold;
+  }
+  .action-list li::before {
+    content: '-';
+    position: absolute;
+    left: 0;
+    color: #2c5f9e;
+    font-weight: bold;
+  }
+  .insight-list li:last-child,
+  .action-list li:last-child { border-bottom: none; }
+
+  .label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 5px;
+    border-radius: 2px;
+    margin-right: 4px;
+    vertical-align: middle;
+  }
+  .label-fact  { background: #e8f0fb; color: #2c5f9e; }
+  .label-est   { background: #fef3c7; color: #92400e; }
+  .label-unverified { background: #f3f4f6; color: #6b7280; }
+
+  /* 注記 */
+  .note {
+    font-size: 11px;
+    color: #666;
+    margin-top: 6px;
+  }
+
+  /* 区切り */
+  hr { border: none; border-top: 1px solid #d0d8e4; margin: 24px 0; }
+
+  /* フッター */
+  .footer {
+    margin-top: 32px;
+    padding-top: 12px;
+    border-top: 1px solid #d0d8e4;
+    font-size: 11px;
+    color: #666;
+  }
+
+  /* C+セクション用 */
+  .section-label {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    color: #2c5f9e;
+    background: #e8f0fb;
+    padding: 1px 7px;
+    border-radius: 3px;
+    margin-right: 6px;
+    vertical-align: middle;
+  }
+
+  /* タイムライン */
+  .timeline { position: relative; padding-left: 18px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 5px; top: 6px; bottom: 6px;
+    width: 1px; background: #d0d8e4;
+  }
+  .tl-item { position: relative; padding: 0 0 14px 18px; font-size: 12px; }
+  .tl-item::before {
+    content: '';
+    position: absolute;
+    left: -13px; top: 5px;
+    width: 8px; height: 8px;
+    border-radius: 50%;
+    background: #d0d8e4;
+    border: 2px solid #fff;
+  }
+  .tl-item.core::before    { background: #c0392b; }
+  .tl-item.discover::before{ background: #e67e22; }
+  .tl-item.spam::before    { background: #7f8c8d; }
+  .tl-item.施策::before    { background: #2c5f9e; }
+  .tl-date  { font-size: 10px; color: #888; margin-bottom: 1px; }
+  .tl-title { font-weight: 700; font-size: 12px; }
+  .tl-desc  { font-size: 11px; color: #666; margin-top: 1px; }
+
+  /* バッジ */
+  .badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 1px 6px;
+    border-radius: 3px;
+    letter-spacing: 0.02em;
+  }
+  .badge-red    { background: #fde8e8; color: #c0392b; }
+  .badge-green  { background: #e6f9ee; color: #1e8449; }
+  .badge-yellow { background: #fef9e7; color: #b7770d; }
+
+  /* 引用元グリッド */
+  .source-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+  .source-item {
+    background: #fafbfc;
+    border: 1px solid #d0d8e4;
+    border-radius: 4px;
+    padding: 9px 12px;
+  }
+  .source-label {
+    font-size: 10px;
+    font-weight: 700;
+    color: #888;
+    letter-spacing: 0.04em;
+    margin-bottom: 2px;
+  }
+  .source-val { font-size: 11px; color: #333; line-height: 1.5; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ヘッダー -->
+  <div class="report-header">
+    <h1>NotePM blog 週次レポート｜2026年W16（4/13〜4/19）</h1>
+    <div class="report-meta">
+      集計基準日：2026年4月19日（15営業日／21営業日）　経過営業日ベースで着地見込みを算出
+    </div>
+  </div>
+
+  <!-- ① 月次KPIサマリー -->
+  <div class="section-title">① 月次KPIサマリー（2026年4月）</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>指標</th>
+        <th>目標</th>
+        <th>当月実績</th>
+        <th>着地見込み</th>
+        <th>達成率（着地）</th>
+        <th>先月実績</th>
+        <th>先月比（着地）</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AU数（blog+template）</td>
+        <td>200,000</td>
+        <td>97,620</td>
+        <td>136,668</td>
+        <td class="warn">68.3%</td>
+        <td>142,314</td>
+        <td class="down">▼ 96.0%</td>
+      </tr>
+      <tr>
+        <td>WebCV数（blog+template）</td>
+        <td>90件</td>
+        <td>21件</td>
+        <td>29.4件</td>
+        <td class="warn">32.7%</td>
+        <td>37件</td>
+        <td class="down">▼ 79.5%</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">
+    出典：帳票.csv（2026年4月・4/19時点）｜着地見込み＝当月実績÷15営業日×21営業日｜4月の祝日は4/29のみ（祝日リスト.csvより）
+  </p>
+
+  <!-- ② 週次KPI推移 -->
+  <div class="section-title">② 週次KPI推移</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>指標</th>
+        <th>先々週（W14）</th>
+        <th>先週（W15）</th>
+        <th>今週（W16）</th>
+        <th>前週比</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>AU数（ブログ）</td>
+        <td>33,066</td>
+        <td>34,029</td>
+        <td>33,747</td>
+        <td class="down">▼ −282（−0.8%）</td>
+      </tr>
+      <tr>
+        <td>AU数（テンプレート）</td>
+        <td>2,724</td>
+        <td>2,969</td>
+        <td>2,853</td>
+        <td class="down">▼ −116（−3.9%）</td>
+      </tr>
+      <tr>
+        <td><strong>AU数（合算）</strong></td>
+        <td><strong>35,790</strong></td>
+        <td><strong>36,998</strong></td>
+        <td><strong>36,600</strong></td>
+        <td class="down">▼ −398（−1.1%）</td>
+      </tr>
+      <tr>
+        <td>WebCV数（ブログ）</td>
+        <td>8</td>
+        <td>10</td>
+        <td>6</td>
+        <td class="down">▼ −4（−40.0%）</td>
+      </tr>
+      <tr>
+        <td>WebCV数（テンプレート）</td>
+        <td>0</td>
+        <td>1</td>
+        <td>0</td>
+        <td class="down">▼ −1（−100%）</td>
+      </tr>
+      <tr>
+        <td><strong>WebCV数（合算）</strong></td>
+        <td><strong>8</strong></td>
+        <td><strong>11</strong></td>
+        <td><strong>6</strong></td>
+        <td class="down">▼ −5（−45.5%）</td>
+      </tr>
+      <tr>
+        <td><strong>CVR（合算AU→合算WebCV）</strong></td>
+        <td><strong>0.022%</strong></td>
+        <td><strong>0.030%</strong></td>
+        <td><strong>0.016%</strong></td>
+        <td class="down">▼ −0.013pt</td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">
+    出典：GA4 Organic Search｜blog_au.csv・template_au.csv・blog_cv.csv・template_cv.csv（W14=4/6〜4/12、W15=4/6〜4/12、W16=4/13〜4/19）
+  </p>
+
+  <!-- ③ 示唆 -->
+  <div class="section-title">③ 示唆</div>
+
+  <ul class="insight-list">
+    <li>
+      <strong>AU数：</strong>
+      W16のAU合算（36,600）はW15比−1.1%とほぼ横ばい。月次着地見込みは136,668（目標比68.3%）で未達が確定的。
+      <span class="label label-fact">事実</span>GA4月次データで1月→4月のAU漸減を記事単位で確認したところ、1月AU100以上の記事294件のうち61.9%が2月に急落するパターンを示しており（GA4月次CSV）、同時期にGSC共通406KWの平均CTRが−4.22ptと6ヶ月で最大の落下を記録（GSC月次CSV）。
+      <span class="label label-fact">事実</span>Ahrefsグラフ上の2月5日前後のGマーカーがGoogle公式の「2026年2月ディスカバーアップデート（2/5開始・22日間）」と一致（Google検索ステータスダッシュボード）。
+      <span class="label label-est">推定</span>G②ディスカバーアップデートとAIオーバービューによるCTR低下が主因と推定。非公開化325記事のAhrefsトラフィック合計は477と軽微で影響はほぼゼロ。
+    </li>
+    <li>
+      <strong>WebCV数・CVR：</strong>
+      W16のCV合算は6件（W15比−45.5%）で、AU減少幅（−1.1%）と不釣り合いな落ち込み。
+      <span class="label label-fact">事実</span>blog_cv.csvでW15のCV発生記事リストに含まれていた/blog/29244（社内規定テンプレート）・/blog/32288（嘆願書テンプレート）がW16のリストに含まれない。この2記事はAhrefsで11月→4月のtraffic増加が確認されている成長記事（ahrefs_2025-11_VS_2026-04.csv）。
+      <span class="label label-unverified">未検証</span>W16でこの2記事のAUが実際に下がったかはGA4記事別週次データがないと確認不可。W16に施策（公開・リライト）はなし（施策ロク_1.csv）。
+      <span class="label label-est">推定</span>W15にCVを出した成長記事2本がW16で発火しなかったことが主因と推定されるが、週単位の発火タイミングの問題の可能性もあり断定は避ける。月次CVRは3月0.026%→4月0.022%と低下継続中（帳票.csv）。
+      <strong style="display:block;margin-top:4px;">外的要因：</strong>
+      <span class="label label-fact">事実</span>対象週（W16）に新たなGoogleアップデートは発生していない（Google検索ステータスダッシュボード）。AU漸減の主要転換点はG②（2/5）・追加下落はG③（3/24）・G④（3/27）。3月→4月のGSC平均CTRは+1.06ptと6ヶ月ぶりのプラスで底打ちの可能性があるが、4月データは4/19時点のため月末確定後に再確認が必要。
+    </li>
+  </ul>
+
+  <!-- ④ ネクストアクション -->
+  <div class="section-title">④ ネクストアクション</div>
+
+  <ul class="action-list">
+    <li>
+      <strong>/blog/29244・/blog/32288 のW16クリック数・順位をGSCページ別レポートで確認する</strong><br>
+      W15にCV貢献した2記事がW16でゼロ。AUが実際に下がったのか・CVコンバージョンだけ外れたのかを切り分ける起点。
+    </li>
+    <li>
+      <strong>テンプレート系記事の上位10記事でCTA配置・訴求文を点検する</strong><br>
+      テンプレートカテゴリは1月→4月でAU▼−20,621（−58.5%）かつGSC CTRが2月以降も回復なし（−4.0pt継続）。新規AUの回復は困難な構造だが、現存AUからのCV転換率改善は施策可能な範囲。
+    </li>
+    <li>
+      <strong>SharePointカテゴリの3月以降のGSC順位変動をさちこで確認する</strong><br>
+      SharePointはAU+21.8%と唯一の成長カテゴリだが、GSC CTRが2月→4月で−5.2ptと後から落ちている。G③④（3月末）の影響か構造的問題かを早期判断する。
+    </li>
+    <li>
+      <strong>4月末の帳票・GSCデータ確定後に底打ち判断を行う</strong><br>
+      GSC共通406KWで3月→4月のCTRが+1.06ptと6ヶ月ぶりのプラス。4月月末データで傾向が継続していれば回復施策の仕込みタイミングと判断できる。
+    </li>
+  </ul>
+
+  <!-- C+ コアアップデート × 施策タイムライン -->
+  <div class="section-title"><span class="section-label">C+</span>コアアップデート × 施策タイムライン</div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px;margin-bottom:6px;">
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#888;letter-spacing:0.05em;margin-bottom:10px;">アップデート（Google公式）</div>
+      <div class="timeline">
+        <div class="tl-item core">
+          <div class="tl-date">2025年12月11日</div>
+          <div class="tl-title">G① 12月コアアップデート</div>
+          <div class="tl-desc">18日2時間｜急騰後に急落。下落トレンドの起点</div>
+        </div>
+        <div class="tl-item discover">
+          <div class="tl-date">2026年2月5日</div>
+          <div class="tl-title">G② ディスカバーアップデート ⚠️</div>
+          <div class="tl-desc">21日17時間｜最大の転換点。AU漸減の主因</div>
+        </div>
+        <div class="tl-item spam">
+          <div class="tl-date">2026年3月24日</div>
+          <div class="tl-title">G③ スパム対策アップデート</div>
+          <div class="tl-desc">19時間30分｜低水準での追撃</div>
+        </div>
+        <div class="tl-item core">
+          <div class="tl-date">2026年3月27日</div>
+          <div class="tl-title">G④ 3月コアアップデート</div>
+          <div class="tl-desc">12日間4時間｜G③と近接。3月末下落を固定化</div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div style="font-size:11px;font-weight:700;color:#888;letter-spacing:0.05em;margin-bottom:10px;">施策ログ</div>
+      <div class="timeline">
+        <div class="tl-item 施策">
+          <div class="tl-date">2025年11月末</div>
+          <div class="tl-title">20記事追加</div>
+        </div>
+        <div class="tl-item 施策">
+          <div class="tl-date">2026年2月5日</div>
+          <div class="tl-title">334記事タイトル一括変更</div>
+          <div class="tl-desc">G②と同日開始のため効果検証不可</div>
+        </div>
+        <div class="tl-item 施策">
+          <div class="tl-date">2026年2月末</div>
+          <div class="tl-title">258記事非公開化</div>
+          <div class="tl-desc">推定▼5,196AU｜実インパクト軽微（Ahrefsトラフィック合計477）</div>
+        </div>
+        <div class="tl-item 施策">
+          <div class="tl-date">2026年3月末</div>
+          <div class="tl-title">67記事非公開化</div>
+          <div class="tl-desc">推定▼11,000AU｜実インパクト軽微</div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <p class="note">出典：Google検索ステータスダッシュボード（PDF）・Ahrefsオーガニックトラフィックグラフ（SS 2026-04-20）・施策ロク_1.csv</p>
+
+  <!-- C+ カテゴリ別AU変化 -->
+  <div class="section-title"><span class="section-label">C+</span>カテゴリ別AU変化（1月→4月）</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>カテゴリ</th>
+        <th>記事数</th>
+        <th>1月AU</th>
+        <th>4月AU</th>
+        <th>変化</th>
+        <th>変化率</th>
+        <th>GSC CTR変化（11月→2月）</th>
+        <th>判定</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>テンプレート</strong></td>
+        <td>66</td>
+        <td>35,240</td>
+        <td>14,619</td>
+        <td class="down">▼−20,621</td>
+        <td class="down">−58.5%</td>
+        <td class="down">−4.5pt・回復なし</td>
+        <td><span class="badge badge-red">最大喪失</span></td>
+      </tr>
+      <tr>
+        <td>Googleドライブ</td>
+        <td>23</td>
+        <td>14,625</td>
+        <td>5,537</td>
+        <td class="down">▼−9,088</td>
+        <td class="down">−62.1%</td>
+        <td class="down">−3.3pt</td>
+        <td><span class="badge badge-red">要注視</span></td>
+      </tr>
+      <tr>
+        <td>エディタ</td>
+        <td>12</td>
+        <td>12,049</td>
+        <td>3,547</td>
+        <td class="down">▼−8,502</td>
+        <td class="down">−70.6%</td>
+        <td class="down">−4.5pt</td>
+        <td><span class="badge badge-red">要注視</span></td>
+      </tr>
+      <tr>
+        <td>Windows10</td>
+        <td>11</td>
+        <td>6,440</td>
+        <td>1,043</td>
+        <td class="down">▼−5,397</td>
+        <td class="down">−83.8%</td>
+        <td>—</td>
+        <td><span class="badge badge-yellow">構造的消滅</span></td>
+      </tr>
+      <tr>
+        <td><strong>SharePoint</strong></td>
+        <td>44</td>
+        <td>12,710</td>
+        <td class="up">15,487</td>
+        <td class="up">▲+2,777</td>
+        <td class="up">+21.8%</td>
+        <td class="up">−0.1pt（ほぼ無影響）</td>
+        <td><span class="badge badge-green">唯一の成長</span></td>
+      </tr>
+      <tr>
+        <td>Markdown</td>
+        <td>21</td>
+        <td>6,280</td>
+        <td class="up">6,955</td>
+        <td class="up">▲+675</td>
+        <td class="up">+10.7%</td>
+        <td class="down">−4.5pt</td>
+        <td><span class="badge badge-green">成長継続</span></td>
+      </tr>
+    </tbody>
+  </table>
+  <p class="note">出典：GA4月次CSV（ga4_au_pages_2026-01〜04）× WPエクスポート（blog_idで結合）・GSC月次CSV（gsc_2025-11〜gsc_2026-04）</p>
+
+  <hr>
+
+  <!-- E. 引用元 -->
+  <div class="section-title"><span class="section-label">E</span>引用元</div>
+
+  <div class="source-grid">
+    <div class="source-item">
+      <div class="source-label">週次KPI（AU・CV・CVR）</div>
+      <div class="source-val">GA4 Organic Search｜blog_au.csv・template_au.csv・blog_cv.csv・template_cv.csv</div>
+    </div>
+    <div class="source-item">
+      <div class="source-label">月次進捗・着地見込み</div>
+      <div class="source-val">帳票.csv（2026年4月・4/19時点）／祝日リスト.csv</div>
+    </div>
+    <div class="source-item">
+      <div class="source-label">記事別AU月次推移</div>
+      <div class="source-val">GA4探索 Organic Search｜ga4_au_pages_2026-01〜04.csv</div>
+    </div>
+    <div class="source-item">
+      <div class="source-label">カテゴリ別AU変化</div>
+      <div class="source-val">GA4月次CSV × WPエクスポート（wp_master.csv）をblog_idで結合</div>
+    </div>
+    <div class="source-item">
+      <div class="source-label">CTR月次推移・AIオーバービュー分析</div>
+      <div class="source-val">Google Search Console｜gsc_2025-11〜gsc_2026-04.csv（6ファイル・406KW共通）</div>
+    </div>
+    <div class="source-item">
+      <div class="source-label">コアアップデート発生日時</div>
+      <div class="source-val">Google検索ステータスダッシュボード（PDF）+ Ahrefsグラフ（SS 2026-04-20）</div>
+    </div>
+    <div class="source-item">
+      <div class="source-label">Ahrefsトラフィック比較</div>
+      <div class="source-val">Ahrefs Site Explorer｜ahrefs_2025-11_VS_2026-04.csv（1,204ページ）</div>
+    </div>
+    <div class="source-item">
+      <div class="source-label">施策タイムライン</div>
+      <div class="source-val">施策ロク_1.csv</div>
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <div class="footer" style="margin-top:24px;">
+    NotePM blog 週次レポート｜2026年W16（4/13〜4/19）　作成：Claude Sonnet 4.6｜2026年4月21日
+  </div>
+
+</div>
+</body>
+</html>
