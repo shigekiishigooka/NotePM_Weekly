@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NotePM 週次レポート｜2026年W21</title>
+<style>
+  :root {
+    --blue: #1a56db; --blue-light: #ebf1fd;
+    --red: #e02424;  --red-light: #fde8e8;
+    --green: #057a55; --green-light: #def7ec;
+    --gray-50: #f9fafb; --gray-100: #f3f4f6;
+    --gray-200: #e5e7eb; --gray-400: #9ca3af;
+    --gray-600: #4b5563; --gray-800: #1f2937;
+    --amber: #f59e0b;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: "Hiragino Sans","Yu Gothic",sans-serif; background: var(--gray-100); color: var(--gray-800); font-size: 14px; line-height: 1.6; }
+  .header { background: var(--blue); color: #fff; padding: 20px 32px; }
+  .header h1 { font-size: 18px; font-weight: 700; }
+  .header p  { font-size: 12px; opacity: .75; margin-top: 3px; }
+  .container { max-width: 1080px; margin: 0 auto; padding: 20px 16px; display: flex; flex-direction: column; gap: 16px; }
+  .card { background: #fff; border-radius: 10px; padding: 18px 22px; box-shadow: 0 1px 3px rgba(0,0,0,.08); }
+  .card-title { font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--blue); border-bottom: 2px solid var(--blue-light); padding-bottom: 8px; margin-bottom: 14px; }
+  table { width: 100%; border-collapse: collapse; font-size: 13px; }
+  th { background: var(--gray-50); padding: 7px 10px; text-align: left; font-weight: 600; color: var(--gray-600); border-bottom: 2px solid var(--gray-200); white-space: nowrap; }
+  td { padding: 7px 10px; border-bottom: 1px solid var(--gray-100); vertical-align: middle; }
+  tr:last-child td { border-bottom: none; }
+  .num { text-align: right; font-variant-numeric: tabular-nums; }
+  .bold { font-weight: 700; }
+  .sub-row td { color: var(--gray-400); font-size: 12px; padding-left: 20px; }
+  .avg-col { background: #fafaf0; }
+  .dn  { display: inline-block; background: var(--red-light);   color: var(--red);   font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; white-space: nowrap; }
+  .up  { display: inline-block; background: var(--green-light); color: var(--green); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; white-space: nowrap; }
+  .nt  { display: inline-block; background: var(--gray-100);    color: var(--gray-600); font-size: 11px; font-weight: 700; padding: 1px 6px; border-radius: 99px; white-space: nowrap; }
+  .gw  { display: inline-block; background: #fff3cd; color: #856404; font-size: 10px; font-weight: 600; padding: 1px 5px; border-radius: 3px; margin-left: 4px; }
+  .gauge-row { display: flex; align-items: center; gap: 10px; margin-top: 6px; }
+  .gauge-track { flex: 1; height: 7px; background: var(--gray-200); border-radius: 4px; overflow: hidden; }
+  .gauge-fill { height: 100%; border-radius: 4px; }
+  .gauge-label { font-size: 12px; font-weight: 700; min-width: 44px; text-align: right; }
+  .kpi-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 16px; }
+  .kpi-box { background: var(--gray-50); border-radius: 8px; padding: 12px 14px; }
+  .kpi-label { font-size: 11px; color: var(--gray-600); }
+  .kpi-value { font-size: 24px; font-weight: 800; margin: 2px 0 1px; }
+  .kpi-sub { font-size: 11px; color: var(--gray-600); }
+  .alert { background: #fefce8; border: 1px solid #fcd34d; border-radius: 7px; padding: 8px 12px; font-size: 12px; color: #92400e; margin-bottom: 14px; }
+  .col2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .col-title { font-size: 12px; font-weight: 700; color: var(--gray-600); margin-bottom: 8px; }
+  .rank-row { display: flex; align-items: flex-start; gap: 8px; padding: 7px 0; border-bottom: 1px solid var(--gray-100); }
+  .rank-row:last-child { border-bottom: none; }
+  .rank-num { width: 22px; height: 22px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 700; color: #fff; flex-shrink: 0; margin-top: 1px; }
+  .r1 { background: var(--amber); } .r2 { background: var(--gray-400); } .r3 { background: #cd7c3b; } .rn { background: var(--blue); }
+  .rank-body { flex: 1; min-width: 0; }
+  .rank-cat { font-size: 10px; color: var(--blue); background: var(--blue-light); display: inline-block; padding: 0 5px; border-radius: 3px; margin-bottom: 2px; }
+  .rank-title { font-size: 12px; line-height: 1.4; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .rank-val { font-weight: 700; font-size: 13px; white-space: nowrap; margin-left: 6px; flex-shrink: 0; }
+  .insight { border-left: 4px solid var(--blue); background: var(--blue-light); border-radius: 0 7px 7px 0; padding: 10px 14px; margin-bottom: 10px; }
+  .insight:last-child { margin-bottom: 0; }
+  .insight-head { font-weight: 700; font-size: 13px; margin-bottom: 6px; }
+  .insight p { font-size: 13px; margin-bottom: 5px; }
+  .insight p:last-child { margin-bottom: 0; }
+  .tag-f { font-weight: 700; color: var(--blue); margin-right: 4px; }
+  .tag-e { font-weight: 700; color: var(--amber); margin-right: 4px; }
+  .summary-box { background: var(--gray-50); border-radius: 7px; padding: 10px 14px; margin-bottom: 14px; font-size: 13px; font-weight: 600; }
+  .src { font-size: 10px; color: var(--gray-400); text-align: right; margin-top: 10px; }
+  .note { font-size: 11px; color: var(--gray-600); margin-top: 8px; background: var(--gray-50); padding: 6px 10px; border-radius: 5px; }
+  @media(max-width:640px){ .col2,.kpi-grid { grid-template-columns: 1fr; } }
+</style>
+</head>
+<body>
+
+<div class="header">
+  <h1>NotePM 週次レポート｜2026年W21（5/18〜5/24）</h1>
+  <p>対象月：2026年5月　／　経過営業日：13日 / 18日　／　出力：2026-05-25</p>
+</div>
+
+<div class="container">
+
+  <!-- ① 月次KPIサマリー -->
+  <div class="card">
+    <div class="card-title">① 月次KPIサマリー（2026年5月・進行中）</div>
+    <div class="kpi-grid">
+      <div class="kpi-box">
+        <div class="kpi-label">AU 着地見込み</div>
+        <div class="kpi-value">130,820</div>
+        <div class="kpi-sub">目標 200,000　先月実績 151,469</div>
+        <div class="gauge-row">
+          <div class="gauge-track"><div class="gauge-fill" style="width:65.4%;background:#f59e0b"></div></div>
+          <div class="gauge-label" style="color:#f59e0b">65.4%</div>
+        </div>
+      </div>
+      <div class="kpi-box">
+        <div class="kpi-label">WebCV 着地見込み</div>
+        <div class="kpi-value">20.8件</div>
+        <div class="kpi-sub">目標 90件　先月実績 34件</div>
+        <div class="gauge-row">
+          <div class="gauge-track"><div class="gauge-fill" style="width:23.1%;background:var(--red)"></div></div>
+          <div class="gauge-label" style="color:var(--red)">23.1%</div>
+        </div>
+      </div>
+    </div>
+    <table>
+      <thead><tr><th>指標</th><th class="num">目標</th><th class="num">実績</th><th class="num">達成率</th><th class="num">着地見込み</th><th class="num">着地達成率</th><th class="num">前月（4月）</th></tr></thead>
+      <tbody>
+        <tr><td class="bold">AU数（合算）</td><td class="num">200,000</td><td class="num">94,481</td><td class="num"><span class="dn">47.2%</span></td><td class="num bold">130,820</td><td class="num"><span class="nt">65.4%</span></td><td class="num">151,469</td></tr>
+        <tr class="sub-row"><td>　うち blog</td><td class="num">—</td><td class="num">86,833</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">139,695</td></tr>
+        <tr class="sub-row"><td>　うち template</td><td class="num">—</td><td class="num">7,648</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">11,774</td></tr>
+        <tr><td class="bold">WebCV数（合算）</td><td class="num">90件</td><td class="num">15件</td><td class="num"><span class="dn">16.7%</span></td><td class="num bold">20.8件</td><td class="num"><span class="dn">23.1%</span></td><td class="num">34件</td></tr>
+        <tr class="sub-row"><td>　うち blog</td><td class="num">—</td><td class="num">15件</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">29件</td></tr>
+        <tr class="sub-row"><td>　うち template</td><td class="num">—</td><td class="num">0件</td><td class="num">—</td><td class="num">—</td><td class="num">—</td><td class="num">5件</td></tr>
+      </tbody>
+    </table>
+    <div class="src">出典：帳票.csv（2026/05）・祝日リスト.csv</div>
+  </div>
+
+  <!-- ② 週次KPI推移 -->
+  <div class="card">
+    <div class="card-title">② 週次KPI推移</div>
+    <table>
+      <thead>
+        <tr>
+          <th>指標</th>
+          <th class="num">W19<br><small>5/4〜5/10</small></th>
+          <th class="num">W20<br><small>5/11〜5/17</small></th>
+          <th class="num">W21（今週）<br><small>5/18〜5/24</small></th>
+          <th class="num">前週比</th>
+          <th class="num avg-col">直前7週平均<br><small>W14〜W20 ※</small></th>
+          <th class="num avg-col">7週平均比</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>AU数（ブログ）</td>
+          <td class="num">18,350 <span class="gw">GW後半</span></td>
+          <td class="num">31,532</td>
+          <td class="num bold">31,048</td>
+          <td class="num"><span class="dn">-1.5%</span></td>
+          <td class="num avg-col">—</td>
+          <td class="num avg-col">—</td>
+        </tr>
+        <tr>
+          <td>AU数（テンプレート）</td>
+          <td class="num">1,512 <span class="gw">GW後半</span></td>
+          <td class="num">2,762</td>
+          <td class="num bold">2,845</td>
+          <td class="num"><span class="up">+3.0%</span></td>
+          <td class="num avg-col">—</td>
+          <td class="num avg-col">—</td>
+        </tr>
+        <tr style="background:var(--gray-50)">
+          <td class="bold">AU数（合算）</td>
+          <td class="num bold">19,862</td>
+          <td class="num bold">34,294</td>
+          <td class="num bold">33,893</td>
+          <td class="num"><span class="dn">-1.2%</span></td>
+          <td class="num avg-col bold">32,291</td>
+          <td class="num avg-col"><span class="up">+5.0%</span></td>
+        </tr>
+        <tr>
+          <td>WebCV数（ブログ）</td>
+          <td class="num">3件</td>
+          <td class="num">9件</td>
+          <td class="num bold">3件</td>
+          <td class="num"><span class="dn">-66.7%</span></td>
+          <td class="num avg-col">—</td>
+          <td class="num avg-col">—</td>
+        </tr>
+        <tr>
+          <td>WebCV数（テンプレート）</td>
+          <td class="num">0件</td>
+          <td class="num">0件</td>
+          <td class="num bold">0件</td>
+          <td class="num"><span class="nt">—</span></td>
+          <td class="num avg-col">—</td>
+          <td class="num avg-col">—</td>
+        </tr>
+        <tr style="background:var(--gray-50)">
+          <td class="bold">WebCV数（合算）</td>
+          <td class="num bold">3件</td>
+          <td class="num bold">9件</td>
+          <td class="num bold">3件</td>
+          <td class="num"><span class="dn">-66.7%</span></td>
+          <td class="num avg-col bold">7.3件</td>
+          <td class="num avg-col"><span class="dn">-58.9%</span></td>
+        </tr>
+        <tr style="background:var(--gray-50)">
+          <td class="bold">CVR（合算）</td>
+          <td class="num bold">0.015%</td>
+          <td class="num bold">0.026%</td>
+          <td class="num bold">0.009%</td>
+          <td class="num"><span class="dn">-0.017pt</span></td>
+          <td class="num avg-col bold">0.023%</td>
+          <td class="num avg-col"><span class="dn">-0.014pt</span></td>
+        </tr>
+      </tbody>
+    </table>
+    <div class="note">※ 直前7週平均（W14〜W20）にはGW週W18（AU=6,305）を含むため平均値はやや低め。W19はGW後半を含む週のため参考値。</div>
+    <div class="src">出典：blog_au.csv / template_au.csv / blog_cv.csv / template_cv.csv（90日間エクスポート）</div>
+  </div>
+
+  <!-- ③ 記事別ランキング -->
+  <div class="card">
+    <div class="card-title">③ 記事別ランキング（blog + template 合算）</div>
+    <div class="col2">
+      <div>
+        <div class="col-title">AU上位 W21（今週）</div>
+        <div class="rank-row"><div class="rank-num r1">1</div><div class="rank-body"><div><span class="rank-cat">Markdown</span></div><div class="rank-title">【2026年版】Markdown(マークダウン)エディタ厳選まとめ</div></div><div class="rank-val">1,375</div></div>
+        <div class="rank-row"><div class="rank-num r2">2</div><div class="rank-body"><div><span class="rank-cat">SharePoint</span></div><div class="rank-title">SharePointの使い方｜初心者向けに基本操作から権限設定まで解説</div></div><div class="rank-val">1,067</div></div>
+        <div class="rank-row"><div class="rank-num r3">3</div><div class="rank-body"><div><span class="rank-cat">エディタ</span></div><div class="rank-title">【2026年版】Windows テキストエディタ おすすめ10選！</div></div><div class="rank-val">980</div></div>
+        <div class="rank-row"><div class="rank-num rn">4</div><div class="rank-body"><div><span class="rank-cat">エディタ</span></div><div class="rank-title">【2026年版】Diffツール おすすめ12選！</div></div><div class="rank-val">906</div></div>
+        <div class="rank-row"><div class="rank-num rn">5</div><div class="rank-body"><div><span class="rank-cat">テンプレート</span></div><div class="rank-title">accident-report</div></div><div class="rank-val">697</div></div>
+        <div class="rank-row"><div class="rank-num rn">6</div><div class="rank-body"><div><span class="rank-cat">テンプレート</span></div><div class="rank-title">【Word版】案内文書の無料テンプレート・例文10選</div></div><div class="rank-val">616</div></div>
+        <div class="rank-row"><div class="rank-num rn">7</div><div class="rank-body"><div><span class="rank-cat">SharePoint</span></div><div class="rank-title">SharePointのリストとは？作成方法から使い方まで基本操作を解説</div></div><div class="rank-val">495</div></div>
+        <div class="rank-row"><div class="rank-num rn">8</div><div class="rank-body"><div><span class="rank-cat">Markdown</span></div><div class="rank-title">【ブラウザ専用】オンラインMarkdownエディタ おすすめ4選</div></div><div class="rank-val">484</div></div>
+        <div class="rank-row"><div class="rank-num rn">9</div><div class="rank-body"><div><span class="rank-cat">OneNote</span></div><div class="rank-title">OneNoteを活かした仕事術が凄い！10の活用方法を解説</div></div><div class="rank-val">475</div></div>
+        <div class="rank-row"><div class="rank-num rn">10</div><div class="rank-body"><div><span class="rank-cat">Windows10</span></div><div class="rank-title">Windows10/11での共有フォルダの作り方と設定手順</div></div><div class="rank-val">446</div></div>
+      </div>
+      <div>
+        <div class="col-title">AU上位 W20（先週）</div>
+        <div class="rank-row"><div class="rank-num r1">1</div><div class="rank-body"><div><span class="rank-cat">Markdown</span></div><div class="rank-title">【2026年版】Markdown(マークダウン)エディタ厳選まとめ</div></div><div class="rank-val">1,283</div></div>
+        <div class="rank-row"><div class="rank-num r2">2</div><div class="rank-body"><div><span class="rank-cat">SharePoint</span></div><div class="rank-title">SharePointの使い方｜初心者向けに基本操作から権限設定まで解説</div></div><div class="rank-val">1,191</div></div>
+        <div class="rank-row"><div class="rank-num r3">3</div><div class="rank-body"><div><span class="rank-cat">エディタ</span></div><div class="rank-title">【2026年版】Windows テキストエディタ おすすめ10選！</div></div><div class="rank-val">1,002</div></div>
+        <div class="rank-row"><div class="rank-num rn">4</div><div class="rank-body"><div><span class="rank-cat">エディタ</span></div><div class="rank-title">【2026年版】Diffツール おすすめ12選！</div></div><div class="rank-val">685</div></div>
+        <div class="rank-row"><div class="rank-num rn">5</div><div class="rank-body"><div><span class="rank-cat">テンプレート</span></div><div class="rank-title">accident-report</div></div><div class="rank-val">673</div></div>
+        <div class="rank-row"><div class="rank-num rn">6</div><div class="rank-body"><div><span class="rank-cat">テンプレート</span></div><div class="rank-title">【Word版】案内文書の無料テンプレート・例文10選</div></div><div class="rank-val">637</div></div>
+        <div class="rank-row"><div class="rank-num rn">7</div><div class="rank-body"><div><span class="rank-cat">SharePoint</span></div><div class="rank-title">SharePointをエクスプローラーで開く手順を解説</div></div><div class="rank-val">511</div></div>
+        <div class="rank-row"><div class="rank-num rn">8</div><div class="rank-body"><div><span class="rank-cat">OneNote</span></div><div class="rank-title">OneNoteを活かした仕事術が凄い！10の活用方法を解説</div></div><div class="rank-val">509</div></div>
+        <div class="rank-row"><div class="rank-num rn">9</div><div class="rank-body"><div><span class="rank-cat">Windows10</span></div><div class="rank-title">Windows10/11での共有フォルダの作り方と設定手順</div></div><div class="rank-val">464</div></div>
+        <div class="rank-row"><div class="rank-num rn">10</div><div class="rank-body"><div><span class="rank-cat">SharePoint</span></div><div class="rank-title">SharePointのアクセス権限の設定手順や注意点</div></div><div class="rank-val">448</div></div>
+      </div>
+    </div>
+    <div style="margin-top:20px">
+      <div class="col2">
+        <div>
+          <div class="col-title">CV発生記事 W21（今週）</div>
+          <div class="rank-row"><div class="rank-num r1">1</div><div class="rank-body"><div><span class="rank-cat">社内wiki</span></div><div class="rank-title">WordPressで社内wikiを作る方法｜おすすめテーマやNotePMとの違いを紹介</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num r2">2</div><div class="rank-body"><div><span class="rank-cat">テンプレート</span></div><div class="rank-title">【Word版】案内文書の無料テンプレート・例文10選</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num r3">3</div><div class="rank-body"><div><span class="rank-cat">テンプレート</span></div><div class="rank-title">社内規定の無料テンプレート・例文17選｜就業規則との違いと作り方を解説</div></div><div class="rank-val">1件</div></div>
+        </div>
+        <div>
+          <div class="col-title">CV発生記事 W20（先週）</div>
+          <div class="rank-row"><div class="rank-num r1">1</div><div class="rank-body"><div><span class="rank-cat">Googleドライブ</span></div><div class="rank-title">Googleドライブ上の動画が再生できないのはなぜ？8つの対処法を解説</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num r2">2</div><div class="rank-body"><div><span class="rank-cat">エディタ</span></div><div class="rank-title">【2026年版】無料で使えるオープンソースのテキストエディタ おすすめ10選！</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num r3">3</div><div class="rank-body"><div><span class="rank-cat">FAQ</span></div><div class="rank-title">社内向けの知恵袋とは？作成するメリットや運用のポイント</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num rn">4</div><div class="rank-body"><div><span class="rank-cat">マニュアル作成</span></div><div class="rank-title">マニュアル作成ツールおすすめ比較12選【タイプ別】</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num rn">5</div><div class="rank-body"><div><span class="rank-cat">オンラインストレージ</span></div><div class="rank-title">フォルダ管理の基本ルールと実践手順｜業務効率化のコツ</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num rn">6</div><div class="rank-body"><div><span class="rank-cat">Markdown</span></div><div class="rank-title">【2026年版】MarkdownからPDFに変換できるエディタ・ツールまとめ</div></div><div class="rank-val">1件</div></div>
+          <div class="rank-row"><div class="rank-num rn">7</div><div class="rank-body"><div><span class="rank-cat">Googleサイト</span></div><div class="rank-title">Googleサイトの作り方・使い方</div></div><div class="rank-val">1件</div></div>
+        </div>
+      </div>
+    </div>
+    <div class="src">出典：blog_au_pages.csv / template_au_pages.csv / blog_cv_pages.csv / template_cv_pages.csv（blog+template合算）× wp_master.csv</div>
+  </div>
+
+  <!-- ④ カテゴリ別ランキング -->
+  <div class="card">
+    <div class="card-title">④ カテゴリ別ランキング（blog + template 合算）</div>
+    <div class="col2">
+      <div>
+        <div class="col-title">カテゴリ別 AU</div>
+        <table>
+          <thead><tr><th>#</th><th>カテゴリ</th><th class="num">W21</th><th class="num">W20</th><th class="num">前週比</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>テンプレート</td><td class="num bold">8,438</td><td class="num">8,470</td><td class="num"><span class="dn">-0.4%</span></td></tr>
+            <tr><td>2</td><td>SharePoint</td><td class="num bold">6,162</td><td class="num">6,603</td><td class="num"><span class="dn">-6.7%</span></td></tr>
+            <tr><td>3</td><td>エディタ</td><td class="num bold">3,144</td><td class="num">2,894</td><td class="num"><span class="up">+8.6%</span></td></tr>
+            <tr><td>4</td><td>Markdown</td><td class="num bold">3,130</td><td class="num">2,893</td><td class="num"><span class="up">+8.2%</span></td></tr>
+            <tr><td>5</td><td>オンラインストレージ</td><td class="num bold">2,403</td><td class="num">2,576</td><td class="num"><span class="dn">-6.7%</span></td></tr>
+            <tr><td>6</td><td>Googleドライブ</td><td class="num bold">2,078</td><td class="num">1,970</td><td class="num"><span class="up">+5.5%</span></td></tr>
+            <tr><td>7</td><td>業務効率化</td><td class="num bold">1,055</td><td class="num">1,118</td><td class="num"><span class="dn">-5.6%</span></td></tr>
+            <tr><td>8</td><td>Googleサイト</td><td class="num bold">1,015</td><td class="num">995</td><td class="num"><span class="up">+2.0%</span></td></tr>
+            <tr><td>9</td><td>その他</td><td class="num bold">909</td><td class="num">893</td><td class="num"><span class="up">+1.8%</span></td></tr>
+            <tr><td>10</td><td>マニュアル作成</td><td class="num bold">907</td><td class="num">903</td><td class="num"><span class="up">+0.4%</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div>
+        <div class="col-title">カテゴリ別 CV</div>
+        <table>
+          <thead><tr><th>#</th><th>カテゴリ</th><th class="num">W21</th><th class="num">W20</th></tr></thead>
+          <tbody>
+            <tr><td>1</td><td>テンプレート</td><td class="num bold">2件</td><td class="num">—</td></tr>
+            <tr><td>2</td><td>社内wiki</td><td class="num bold">1件</td><td class="num">—</td></tr>
+            <tr><td>—</td><td>Googleドライブ</td><td class="num">—</td><td class="num">1件</td></tr>
+            <tr><td>—</td><td>エディタ</td><td class="num">—</td><td class="num">1件</td></tr>
+            <tr><td>—</td><td>FAQ</td><td class="num">—</td><td class="num">1件</td></tr>
+            <tr><td>—</td><td>マニュアル作成</td><td class="num">—</td><td class="num">1件</td></tr>
+            <tr><td>—</td><td>オンラインストレージ</td><td class="num">—</td><td class="num">1件</td></tr>
+            <tr><td>—</td><td>Markdown</td><td class="num">—</td><td class="num">1件</td></tr>
+            <tr><td>—</td><td>Googleサイト</td><td class="num">—</td><td class="num">1件</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="src">出典：blog_au_pages.csv / template_au_pages.csv / blog_cv_pages.csv / template_cv_pages.csv（blog+template合算）× wp_master.csv</div>
+  </div>
+
+  <!-- ⑤ 示唆 -->
+  <div class="card">
+    <div class="card-title">⑤ 示唆</div>
+    <div class="summary-box">
+      AU前週比-1.2%とほぼ横ばい。7週平均比+5.0%でGW明け水準が定着。CV3件は7週平均（7.3件）を大幅に下回るが、AU起因ではなくW20（9件）が好調週だったことによる反動。
+    </div>
+    <div class="insight">
+      <div class="insight-head">① AU数</div>
+      <p><span class="tag-f">【事実】</span>W21 AU合算33,893は前週比-1.2%（-401AU）とほぼ横ばい。7週平均（32,291）比では+5.0%と平均超えを維持。W20・W21と2週連続で33,000〜34,000AU帯で推移しており、GW明け後の水準が定着しつつある。エディタ（+8.6%）・Markdown（+8.2%）・Googleドライブ（+5.5%）がプラス転換。テンプレート・SharePointは微減。</p>
+      <p><span class="tag-e">【推定】</span>GW前の通常週W17（35,494）との比較ではまだ▼4.5%（約1,600AU）の乖離が残る。構造的な下落継続とは判断しづらく、W22の数値で方向性を確認する。</p>
+    </div>
+    <div class="insight">
+      <div class="insight-head">② WebCV数・CVR</div>
+      <p><span class="tag-f">【事実】</span>W21 CV3件・CVR0.009%は7週平均（7.3件・0.023%）比で-58.9%・-0.014ptと大幅マイナス。CV発生記事は社内wiki・テンプレート2記事の計3記事のみ。月次着地見込み20.8件は目標90件の23.1%。</p>
+      <p><span class="tag-e">【推定】</span>W20→W21のCV減少（9件→3件）は、CV発生記事のAU低下によるものではない。W20にCV発生した7記事のW13〜W21のAU推移を確認したところ、Googleサイト記事を除く6記事はAU横ばい〜微増で推移しており、順位低下は確認されない。CV発生記事の週間AUは概ね50〜150と絶対数が少なく、CV発生自体が確率的なばらつきの範囲に収まる。W20の9件が7記事分散による好調週であり、W21の3件が通常水準に近い。月次着地見込み20.8件は目標の23.1%にとどまり、5月最終着地は20〜25件程度の見込み。</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
